@@ -28,13 +28,23 @@ class ShortestPath
   end
 
   def unvisited_nodes
-    @nodes_set.delete @params[:from]
-    @unvisited_nodes = @nodes_set
+    nodes_set.select do |name, node|
+      node.state != :current
+    end
   end
 
-  def neighbors
-    @graph.vertices.find_all do |vertice|
+  def calculate_distances
+    vertices = @graph.vertices.find_all do |vertice|
       vertice.from == @current.name
+    end
+    unvisited_nodes.each do |key, node|
+      if vertice = vertices.find {|vertice| vertice.to == node.name}
+
+        sum = vertice.value + (node.value == :infinity ? 0 : node.value)
+        if node.value == :infinity || sum < node.value
+          node.value = sum
+        end
+      end
     end
   end
 end
