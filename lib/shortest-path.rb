@@ -11,17 +11,21 @@ class ShortestPath
   end
 
   def nodes_set
-    @nodes_set ||= @graph.nodes.reduce({}) do |result, node|
-      result[node]  = if node == @params[:from]
-                        OpenStruct.new value: 0, state: :current
-                      else
-                        OpenStruct.new value: :infinity, state: :unvisited
-                      end
+    @nodes_set ||= @graph.nodes.dup.reduce({}) do |result, node|
+      if node.name == @params[:from]
+        node.value = 0
+        node.state = :current
+      else
+        node.value = :infinity
+        node.state = :unvisited
+      end
+      result[node.name] = node
       result
     end
   end
 
   def unvisited_nodes
-    @unvisited_nodes ||= @graph.nodes - [ @params[:from] ]
+    @nodes_set.delete @params[:from]
+    @unvisited_nodes ||= @nodes_set
   end
 end

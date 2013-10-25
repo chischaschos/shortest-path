@@ -7,7 +7,7 @@ class Graph
   end
 
   def add_node name
-    !!(@nodes << name)
+    !!(@nodes << Node.new(name))
   end
 
   def connect *args

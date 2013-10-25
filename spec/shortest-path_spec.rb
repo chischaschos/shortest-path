@@ -62,7 +62,9 @@ describe ShortestPath do
 
   it 'should have a set of unvisited nodes' do
     nodes = ShortestPath.new(graph, from: '1', to: '5').unvisited_nodes
-    expect(nodes).to include('2', '3', '4', '5', '6')
-    expect(nodes).to_not include '1'
+    ['2', '3', '4', '5', '6'].each do |name|
+      expect(nodes.key? name).to be_true
+    end
+    expect(nodes.key? '1').to_not be_true
   end
 end
