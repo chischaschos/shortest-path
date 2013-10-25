@@ -28,15 +28,41 @@ describe ShortestPath do
   end
 
   it 'should find the shortest path from 1 to 5' do
-    path = ShortestPath.find graph, from: '1', to: '5'
+    path = ShortestPath.new(graph, from: '1', to: '5').find
     expect(path.value).to eq 20
     expect(path.string).to eq '1,3,6,5'
   end
 
   it 'should find the shortest path from 5 to 2' do
-    path = ShortestPath.find graph, from: '1', to: '4'
+    path = ShortestPath.new(graph, from: '1', to: '4').find
     expect(path.value).to eq 21
     expect(path.string).to eq '5,6,3,2'
   end
 
+  it 'should initialize a nodes set' do
+    nodes = ShortestPath.new(graph, from: '1', to: '5').nodes_set
+    expect(nodes['1'].value).to eq 0
+    expect(nodes['1'].state).to eq :current
+
+    expect(nodes['2'].value).to eq :infinity
+    expect(nodes['2'].state).to eq :unvisited
+
+    expect(nodes['3'].value).to eq :infinity
+    expect(nodes['3'].state).to eq :unvisited
+
+    expect(nodes['4'].value).to eq :infinity
+    expect(nodes['4'].state).to eq :unvisited
+
+    expect(nodes['5'].value).to eq :infinity
+    expect(nodes['5'].state).to eq :unvisited
+
+    expect(nodes['6'].value).to eq :infinity
+    expect(nodes['6'].state).to eq :unvisited
+  end
+
+  it 'should have a set of unvisited nodes' do
+    nodes = ShortestPath.new(graph, from: '1', to: '5').unvisited_nodes
+    expect(nodes).to include('2', '3', '4', '5', '6')
+    expect(nodes).to_not include '1'
+  end
 end
