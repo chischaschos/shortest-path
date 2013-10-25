@@ -27,8 +27,16 @@ describe ShortestPath do
     graph
   end
 
-  specify do
-    ShortestPath.find graph
+  it 'should find the shortest path from 1 to 5' do
+    path = ShortestPath.find graph, from: '1', to: '5'
+    expect(path.value).to eq 20
+    expect(path.string).to eq '1,3,6,5'
+  end
+
+  it 'should find the shortest path from 5 to 2' do
+    path = ShortestPath.find graph, from: '1', to: '4'
+    expect(path.value).to eq 21
+    expect(path.string).to eq '5,6,3,2'
   end
 
 end
