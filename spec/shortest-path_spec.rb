@@ -13,7 +13,6 @@ describe ShortestPath do
     graph.connect '1', '2', value: 7
     graph.connect '1', '6', value: 14
     graph.connect '1', '3', value: 9
-    graph.connect '1', '2', value: 7
 
     graph.connect '2', '3', value: 10
     graph.connect '2', '4', value: 15
@@ -66,5 +65,11 @@ describe ShortestPath do
       expect(nodes.key? name).to be_true
     end
     expect(nodes.key? '1').to_not be_true
+  end
+
+  it 'should calculate the unvisited neighbors' do
+    finder = ShortestPath.new graph, from: '1', to: '5'
+    expect(finder.current).to eq Node.new '1'
+    expect(finder.neighbors.map(&:to).sort).to eq ['2', '3', '6']
   end
 end
