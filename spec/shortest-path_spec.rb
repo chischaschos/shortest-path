@@ -29,13 +29,13 @@ describe ShortestPath do
   it 'should find the shortest path from 1 to 5' do
     path = ShortestPath.new(graph, from: '1', to: '5').find
     expect(path.value).to eq 20
-    expect(path.string).to eq '1,3,6,5'
+    expect(path.string).to eq '1,2,3,6,5'
   end
 
-  it 'should find the shortest path from 5 to 2' do
+  it 'should find the shortest path from 1 to 4' do
     path = ShortestPath.new(graph, from: '1', to: '4').find
-    expect(path.value).to eq 21
-    expect(path.string).to eq '5,6,3,2'
+    expect(path.value).to eq 20
+    expect(path.string).to eq '1,2,3,6,5,4'
   end
 
   it 'should initialize a nodes set' do
@@ -104,7 +104,6 @@ describe ShortestPath do
 
     expect(finder.current.name).to eq '1'
     expect(finder.current.value).to eq 0
-    expect(finder.unvisited_nodes.keys).to eq ['2', '3', '4', '5', '6']
     finder.calculate_distances
     expect(finder.step).to be_false
     expect(finder.nodes_set.map do |key, node|
@@ -119,7 +118,6 @@ describe ShortestPath do
 
     expect(finder.current.name).to eq '2'
     expect(finder.current.value).to eq 7
-    expect(finder.unvisited_nodes.keys).to eq ['3', '4', '5', '6']
     finder.calculate_distances
     expect(finder.step).to be_false
     expect(finder.nodes_set.map do |key, node|
@@ -128,13 +126,14 @@ describe ShortestPath do
       {"1"=>0},
       {"2"=>7},
       {"3"=>9},
-      {"4"=>15},
+      {"4"=>22},
       {"5"=>:infinity},
       {"6"=>14}]
 
     expect(finder.current.name).to eq '3'
     expect(finder.current.value).to eq 9
     expect(finder.unvisited_nodes.keys).to eq ['4', '5', '6']
+    debugger
     finder.calculate_distances
     expect(finder.step).to be_false
     expect(finder.nodes_set.map do |key, node|
@@ -143,12 +142,12 @@ describe ShortestPath do
       {"1"=>0},
       {"2"=>7},
       {"3"=>9},
-      {"4"=>15},
+      {"4"=>20},
       {"5"=>:infinity},
-      {"6"=>14}]
+      {"6"=>11}]
 
     expect(finder.current.name).to eq '6'
-    #expect(finder.current.value).to eq 2
+    expect(finder.current.value).to eq 11
     expect(finder.unvisited_nodes.keys).to eq ['4', '5']
     finder.calculate_distances
     expect(finder.step).to be_true
@@ -158,12 +157,12 @@ describe ShortestPath do
       {"1"=>0},
       {"2"=>7},
       {"3"=>9},
-      {"4"=>15},
-      {"5"=>9},
-      {"6"=>14}]
+      {"4"=>20},
+      {"5"=>20},
+      {"6"=>11}]
 
     expect(finder.current.name).to eq '5'
-    #expect(finder.current.value).to eq 2
+    expect(finder.current.value).to eq 20
   end
 
 end
