@@ -29,16 +29,16 @@ class ShortestPath
 
   def unvisited_nodes
     nodes_set.select do |name, node|
-      node.state != :current
+      not [:current, :visited].include? node.state
     end
   end
 
   def calculate_distances
     vertices = @graph.vertices.find_all do |vertice|
-      vertice.from == @current.name
+      vertice.from == @current.name || vertice.to == @current.name
     end
     unvisited_nodes.each do |key, node|
-      if vertice = vertices.find {|vertice| vertice.to == node.name}
+      if vertice = vertices.find {|vertice| vertice.to == node.name || vertice.from == node.name}
 
         sum = vertice.value + (node.value == :infinity ? 0 : node.value)
         if node.value == :infinity || sum < node.value
@@ -46,5 +46,18 @@ class ShortestPath
         end
       end
     end
+    @current.state = :visited
+  end
+
+  def step
+    closest = unvisited_nodes.select do |key, node|
+      node.value != :infinity
+    end.sort_by do |name, node|
+      node.value
+    end.first.last
+    closest.state = :current
+    @current = closest
+
+    @current.name == @params[:to]
   end
 end
