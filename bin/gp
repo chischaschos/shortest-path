@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+puts "\e[H\e[2J"
+
+$:<< File.realpath('./lib')
+require 'shortest-path'
+
+graph = GraphParser.new
+
+begin
+  puts "========= Welcome to the magic graph analyzer that does almost... Nothing ======"
+  puts "========= Press ctr-c to exit ======"
+  while true do
+    print '--> you say: '
+    graph.read gets
+  end
+
+rescue Interrupt
+  puts 'Something killed me bye!'
+end

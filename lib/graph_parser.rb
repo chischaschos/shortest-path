@@ -1,8 +1,6 @@
 class GraphParser
-  attr_reader :errors
-
   def initialize
-    @errors = []
+    @notifier = Notifier.new
   end
 
   def read line
@@ -19,7 +17,7 @@ class GraphParser
       calculate_path $~
 
     else
-      errors << 'Me no speak inglish'
+      @notifier << :what?
     end
   end
 
@@ -27,36 +25,43 @@ class GraphParser
     @graph
   end
 
+  def errors
+    @notifier.messages
+  end
+
   private
 
   def create_graph
     if @graph
-      errors << 'graph already created'
+      @notifier << :graph_already_created
     else
       @graph = Graph.new
+      @notifier << :graph_created
     end
   end
 
   def add_node match
     if @graph
       @graph.add_node match[1]
+      @notifier << :node_created
     else
-      errors << 'Try adding a graph first... try: create'
+      @notifier << :no_graph
     end
   end
 
   def add_edge match
     if !@graph
-      errors << 'Try adding a graph first... try: create'
+      @notifier << :no_graph
     elsif @graph.nodes.empty?
-      errors << 'Try adding nodes first... try: node xyz'
+      @notifier << :no_nodes
     else
       @graph.connect match[1], match[2], value: match[3].to_i
+      @notifier << :edge_created
     end
   end
 
   def calculate_path match
     finder = ShortestPath.new(@graph, from: match[1], to: match[2]).find
-    print "#{finder.value} -> #{finder.string}"
+    puts "-->graph_parser says: #{finder.value} -> #{finder.string}"
   end
 end

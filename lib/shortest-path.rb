@@ -1,3 +1,8 @@
+require 'notifier'
+require 'graph_parser'
+require 'edge'
+require 'node'
+require 'graph'
 require 'ostruct'
 
 class ShortestPath

@@ -10,15 +10,15 @@ describe GraphParser do
   it 'creates an empty graph' do
     subject.read 'create'
     expect(subject.result).to eq Graph.new
-    expect(subject.errors).to eq []
+    expect(subject.errors).to eq [ :graph_created ]
     subject.read 'create'
-    expect(subject.errors).to eq ['graph already created']
+    expect(subject.errors).to eq [ :graph_created, :graph_already_created ]
     expect(subject.result).to eq Graph.new
   end
 
   it 'should add an error when it does not understand the command' do
     subject.read 'TPM!'
-    expect(subject.errors).to eq ['Me no speak inglish']
+    expect(subject.errors).to eq [ :what? ]
   end
 
   it 'adds nodes' do
@@ -26,7 +26,7 @@ describe GraphParser do
 
     subject.read 'node 1'
     subject.read 'node a_node'
-    expect(subject.errors).to eq []
+    expect(subject.errors).to eq [ :graph_created, :node_created, :node_created ]
 
     graph = Graph.new
     graph.add_node '1'
@@ -37,18 +37,18 @@ describe GraphParser do
   it 'adds an error when no graph is created an you try to add a node' do
     subject.read 'node a_node'
     expect(subject.result).to be_nil
-    expect(subject.errors).to eq ['Try adding a graph first... try: create']
+    expect(subject.errors).to eq [ :no_graph ]
   end
 
   it 'should add errors when adding edges without a graph' do
     subject.read 'edge a_node 1 90'
-    expect(subject.errors).to eq ['Try adding a graph first... try: create']
+    expect(subject.errors).to eq [ :no_graph ]
   end
 
   it 'should add errors when adding edges without nodes' do
     subject.read 'create'
     subject.read 'edge a_node 1 90'
-    expect(subject.errors).to eq ['Try adding nodes first... try: node xyz']
+    expect(subject.errors).to eq [ :graph_created, :no_nodes ]
   end
 
   it 'should add edges' do
@@ -56,7 +56,7 @@ describe GraphParser do
     subject.read 'node a_node'
     subject.read 'node 1'
     subject.read 'edge a_node 1 90'
-    expect(subject.errors).to eq []
+    expect(subject.errors).to eq [ :graph_created, :node_created, :node_created, :edge_created ]
 
     graph = Graph.new
     graph.add_node 'a_node'
@@ -83,9 +83,14 @@ describe GraphParser do
     subject.read 'edge 5 6 9'
     subject.read 'edge 6 3 2'
     subject.read 'ahi va un gato corriendo como loco'
-    expect(subject.errors).to eq ['Me no speak inglish']
+    expect(subject.errors).to eq [ :graph_created, :node_created,
+                                   :node_created, :node_created, :node_created,
+                                   :node_created, :node_created, :edge_created,
+                                   :edge_created, :edge_created, :edge_created,
+                                   :edge_created, :edge_created, :edge_created,
+                                   :edge_created, :edge_created, :what?]
     subject.read 'path 1 5'
-    expect(output.string).to eq '20 -> 1,2,3,6,5'
+    expect(output.string).to match /20 -> 1,2,3,6,5/
   end
 
 end
