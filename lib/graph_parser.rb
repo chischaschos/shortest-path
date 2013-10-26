@@ -6,10 +6,18 @@ class GraphParser
   end
 
   def read line
-    if line =~ /create/
+    if line =~ /create\s*/
       create_graph
-    elsif line =~ /node\s(\w+)/
+
+    elsif line =~ /^node\s(\w+)/
       add_node $~
+
+    elsif line =~ /^edge\s(\w+)\s(\w+)\s(\w+)/
+      add_edge $~
+
+    elsif line =~ /^path\s(\w+)\s(\w+)/
+      calculate_path $~
+
     else
       errors << 'Me no speak inglish'
     end
@@ -35,5 +43,20 @@ class GraphParser
     else
       errors << 'Try adding a graph first... try: create'
     end
+  end
+
+  def add_edge match
+    if !@graph
+      errors << 'Try adding a graph first... try: create'
+    elsif @graph.nodes.empty?
+      errors << 'Try adding nodes first... try: node xyz'
+    else
+      @graph.connect match[1], match[2], value: match[3].to_i
+    end
+  end
+
+  def calculate_path match
+    finder = ShortestPath.new(@graph, from: match[1], to: match[2]).find
+    print "#{finder.value} -> #{finder.string}"
   end
 end
