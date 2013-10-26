@@ -16,23 +16,20 @@ class ShortestPath
 
   def calculate_distances
     neighbours.each do |name, node|
-      if v = edge(node, @current)
-        sum = v.value + current.value
-        node.value = sum if node.value == :infinity || sum < node.value
-      end
+      v = edge(node, @current)
+      continue unless v
+      sum = v.value + current.value
+      node.value = sum if node.value == :infinity || sum < node.value
     end
 
     @current.state = :visited
   end
 
   def step
-    closest = neighbours.sort_by do |name, node|
-      node.value
-    end.first.last
-    closest.state = :current
-    @current = closest
-    @path << current.name
-    @current.name == @params[:to]
+    @current = closest_neighbour
+    current.state = :current
+    save_path
+    finished?
   end
 
   def find
@@ -63,6 +60,16 @@ class ShortestPath
 
   private
 
+  def closest_neighbour
+    neighbours.sort_by do |name, node|
+      node.value
+    end.first.last
+  end
+
+  def save_path
+    @path << current.name
+  end
+
   def neighbours
     unvisited_nodes.find_all { |name, node| edge node, @current }
   end
@@ -72,6 +79,10 @@ class ShortestPath
       (edge.to == nodea.name && edge.from == nodeb.name) ||
         (edge.to == nodeb.name && edge.from == nodea.name)
     end
+  end
+
+  def finished?
+    current.name == @params[:to]
   end
 
 end
