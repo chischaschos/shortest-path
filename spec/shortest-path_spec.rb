@@ -133,7 +133,6 @@ describe ShortestPath do
     expect(finder.current.name).to eq '3'
     expect(finder.current.value).to eq 9
     expect(finder.unvisited_nodes.keys).to eq ['4', '5', '6']
-    debugger
     finder.calculate_distances
     expect(finder.step).to be_false
     expect(finder.nodes_set.map do |key, node|

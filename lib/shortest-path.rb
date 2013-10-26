@@ -11,7 +11,7 @@ class ShortestPath
 
   def calculate_distances
     neighbours.each do |name, node|
-      if v = vertice(node, @current)
+      if v = edge(node, @current)
         sum = v.value + current.value
         node.value = sum if node.value == :infinity || sum < node.value
       end
@@ -59,13 +59,13 @@ class ShortestPath
   private
 
   def neighbours
-    unvisited_nodes.find_all { |name, node| vertice node, @current }
+    unvisited_nodes.find_all { |name, node| edge node, @current }
   end
 
-  def vertice nodea, nodeb
-    @graph.vertices.find do |vertice|
-      (vertice.to == nodea.name && vertice.from == nodeb.name) ||
-        (vertice.to == nodeb.name && vertice.from == nodea.name)
+  def edge nodea, nodeb
+    @graph.edges.find do |edge|
+      (edge.to == nodea.name && edge.from == nodeb.name) ||
+        (edge.to == nodeb.name && edge.from == nodea.name)
     end
   end
 

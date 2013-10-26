@@ -1,4 +1,4 @@
-class Vertice
+class Edge
   attr_reader :from, :to, :value
 
   def initialize args

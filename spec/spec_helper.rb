@@ -1,5 +1,6 @@
 $:<< File.realpath('./lib')
-require 'vertice'
+require 'graph_parser'
+require 'edge'
 require 'node'
 require 'graph'
 require 'shortest-path'
