@@ -2,15 +2,15 @@
 
 puts "\e[H\e[2J"
 
-$:<< File.realpath('./lib')
+$LOAD_PATH << File.realpath('./lib')
 require 'shortest-path'
 
 graph = GraphParser.new
 
 begin
-  puts "========= Welcome to the magic graph analyzer that does almost... Nothing ======"
-  puts "========= Press ctr-c to exit ======"
-  while true do
+  puts '========= Welcome to the magic graph analyzer that does almost... Nothing ======'
+  puts '========= Press ctr-c to exit ======'
+  loop do
     print '--> you say: '
     graph.read gets
   end

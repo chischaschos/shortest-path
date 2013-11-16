@@ -16,6 +16,7 @@ describe Graph do
   end
 
   it 'should not allow edges with non existent nodes' do
-    expect { subject.connect '1', '2', value: 20 }.to raise_error 'Can you please add the nodes 1 and 2 first'
+    message = 'Can you please add the nodes 1 and 2 first'
+    expect { subject.connect '1', '2', value: 20 }.to raise_error message
   end
 end

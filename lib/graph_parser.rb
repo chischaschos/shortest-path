@@ -1,20 +1,23 @@
 class GraphParser
+
+  attr_reader :graph
+
   def initialize
     @notifier = Notifier.new
   end
 
-  def read line
+  def read(line)
     if line =~ /create\s*/
       create_graph
 
     elsif line =~ /^node\s(\w+)/
-      add_node $~
+      add_node Regexp.last_match
 
     elsif line =~ /^edge\s(\w+)\s(\w+)\s(\w+)/
-      add_edge $~
+      add_edge Regexp.last_match
 
     elsif line =~ /^path\s(\w+)\s(\w+)/
-      calculate_path $~
+      calculate_path Regexp.last_match
 
     else
       @notifier << :what?
@@ -40,7 +43,7 @@ class GraphParser
     end
   end
 
-  def add_node match
+  def add_node(match)
     if @graph
       @graph.add_node match[1]
       @notifier << :node_created
@@ -49,7 +52,7 @@ class GraphParser
     end
   end
 
-  def add_edge match
+  def add_edge(match)
     if !@graph
       @notifier << :no_graph
     elsif @graph.nodes.empty?
@@ -60,7 +63,7 @@ class GraphParser
     end
   end
 
-  def calculate_path match
+  def calculate_path(match)
     finder = ShortestPath.new(@graph, from: match[1], to: match[2]).find
     puts "-->graph_parser says: #{finder.value} -> #{finder.string}"
   end

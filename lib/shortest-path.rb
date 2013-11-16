@@ -8,7 +8,7 @@ require 'ostruct'
 class ShortestPath
   attr_reader :current
 
-  def initialize *args
+  def initialize(*args)
     @graph, @params = args
     nodes_set
     @path = [@params[:from]]
@@ -33,9 +33,10 @@ class ShortestPath
   end
 
   def find
-    begin
+    loop do
       calculate_distances
-    end while not step
+      break if step
+    end
     OpenStruct.new value: current.value, string: @path.join(',')
   end
 
@@ -71,10 +72,10 @@ class ShortestPath
   end
 
   def neighbours
-    unvisited_nodes.find_all { |name, node| edge node, @current }
+    unvisited_nodes.select { |name, node| edge node, @current }
   end
 
-  def edge nodea, nodeb
+  def edge(nodea, nodeb)
     @graph.edges.find do |edge|
       (edge.to == nodea.name && edge.from == nodeb.name) ||
         (edge.to == nodeb.name && edge.from == nodea.name)
@@ -84,5 +85,4 @@ class ShortestPath
   def finished?
     current.name == @params[:to]
   end
-
 end

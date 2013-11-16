@@ -61,7 +61,7 @@ describe ShortestPath do
 
   it 'should have a set of unvisited nodes' do
     nodes = ShortestPath.new(graph, from: '1', to: '5').unvisited_nodes
-    expect(nodes.keys).to eq ['2', '3', '4', '5', '6']
+    expect(nodes.keys).to eq %w(2 3 4 5 6)
   end
 
   it 'should calculate the unvisited neighbors' do
@@ -75,18 +75,18 @@ describe ShortestPath do
     end
 
     expect(distances).to eq [
-      {"1"=>0},
-      {"2"=>7},
-      {"3"=>9},
-      {"4"=>:infinity},
-      {"5"=>:infinity},
-      {"6"=>14}]
+      { '1' => 0 },
+      { '2' => 7 },
+      { '3' => 9 },
+      { '4' => :infinity },
+      { '5' => :infinity },
+      { '6' => 14 }]
   end
 
   it 'should remove a visited node after caclulating distances' do
     finder = ShortestPath.new graph, from: '1', to: '5'
     finder.calculate_distances
-    expect(finder.unvisited_nodes.keys).to eq ['2', '3', '4', '5', '6']
+    expect(finder.unvisited_nodes.keys).to eq %w(2 3 4 5 6)
     expect(finder.current.state).to eq :visited
   end
 
@@ -96,7 +96,7 @@ describe ShortestPath do
     finder.step
     expect(finder.current.name).to eq '2'
     expect(finder.current.value).to eq 7
-    expect(finder.unvisited_nodes.keys).to eq ['3', '4', '5', '6']
+    expect(finder.unvisited_nodes.keys).to eq %w(3 4 5 6)
   end
 
   it 'should find the path in 3 steps' do
@@ -109,12 +109,12 @@ describe ShortestPath do
     expect(finder.nodes_set.map do |key, node|
       { node.name => node.value }
     end).to eq [
-      {"1"=>0},
-      {"2"=>7},
-      {"3"=>9},
-      {"4"=>:infinity},
-      {"5"=>:infinity},
-      {"6"=>14}]
+      { '1' => 0 },
+      { '2' => 7 },
+      { '3' => 9 },
+      { '4' => :infinity },
+      { '5' => :infinity },
+      { '6' => 14 }]
 
     expect(finder.current.name).to eq '2'
     expect(finder.current.value).to eq 7
@@ -123,42 +123,42 @@ describe ShortestPath do
     expect(finder.nodes_set.map do |key, node|
       { node.name => node.value }
     end).to eq [
-      {"1"=>0},
-      {"2"=>7},
-      {"3"=>9},
-      {"4"=>22},
-      {"5"=>:infinity},
-      {"6"=>14}]
+      { '1' => 0 },
+      { '2' => 7 },
+      { '3' => 9 },
+      { '4' => 22 },
+      { '5' => :infinity },
+      { '6' => 14 }]
 
     expect(finder.current.name).to eq '3'
     expect(finder.current.value).to eq 9
-    expect(finder.unvisited_nodes.keys).to eq ['4', '5', '6']
+    expect(finder.unvisited_nodes.keys).to eq %w(4 5 6)
     finder.calculate_distances
     expect(finder.step).to be_false
     expect(finder.nodes_set.map do |key, node|
       { node.name => node.value }
     end).to eq [
-      {"1"=>0},
-      {"2"=>7},
-      {"3"=>9},
-      {"4"=>20},
-      {"5"=>:infinity},
-      {"6"=>11}]
+      { '1' => 0 },
+      { '2' => 7 },
+      { '3' => 9 },
+      { '4' => 20 },
+      { '5' => :infinity },
+      { '6' => 11 }]
 
     expect(finder.current.name).to eq '6'
     expect(finder.current.value).to eq 11
-    expect(finder.unvisited_nodes.keys).to eq ['4', '5']
+    expect(finder.unvisited_nodes.keys).to eq %w(4 5)
     finder.calculate_distances
     expect(finder.step).to be_true
     expect(finder.nodes_set.map do |key, node|
       { node.name => node.value }
     end).to eq [
-      {"1"=>0},
-      {"2"=>7},
-      {"3"=>9},
-      {"4"=>20},
-      {"5"=>20},
-      {"6"=>11}]
+      { '1' => 0 },
+      { '2' => 7 },
+      { '3' => 9 },
+      { '4' => 20 },
+      { '5' => 20 },
+      { '6' => 11 }]
 
     expect(finder.current.name).to eq '5'
     expect(finder.current.value).to eq 20

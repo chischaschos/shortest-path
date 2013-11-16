@@ -6,13 +6,12 @@ class Notifier
     @messages = []
   end
 
-  def << msg
+  def <<(msg)
     messages << msg
     puts "-->graph_parser says: #{translation messages.last}"
   end
 
-
-  def translation msg
+  def translation(msg)
     {
       what?: 'Me no speak inglish',
       graph_already_created: 'graph already created',
