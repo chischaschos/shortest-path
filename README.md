@@ -52,3 +52,9 @@ Clone the project and then:
     --> you say: path 1 2
     -->graph_parser says: 7 -> 1,2
     --> you say: ^CSomething killed me bye!
+
+== For a cleaner algorithm implementation check
+
+https://gist.github.com/chischaschos/7223804
+
+
